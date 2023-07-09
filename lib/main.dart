@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'package:qrscanner/generate_screen.dart';
 import 'qr_view_screen.dart';
-import 'generate_screen.dart';
 import 'bottom_navigation.dart';
 
 void main() => runApp(const MaterialApp(home: MyHome()));

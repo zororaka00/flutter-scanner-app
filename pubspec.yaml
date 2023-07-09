@@ -37,12 +37,14 @@ dependencies:
   cupertino_icons: ^1.0.2
   
   # Custom
+  http: ^1.1.0
   url_launcher: ^6.1.12
   getwidget: ^3.1.1
   motion_toast: ^2.7.8
   qr_code_scanner: ^1.0.1
   custom_qr_generator: ^0.1.2
   image_gallery_saver: ^2.0.3
+  webview_flutter: ^3.0.0
 
 dev_dependencies:
   flutter_test:
