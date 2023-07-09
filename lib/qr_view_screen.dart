@@ -96,20 +96,18 @@ class _QRViewScreenState extends State<QRViewScreen> {
                             ),
                             SizedBox(height: 5.0),
                             GFButton(
-                              onPressed: () async {
+                              onPressed: () {
                                 final Uri url =
                                     Uri.parse(_textResultController.text);
-                                if (await canLaunchUrl(url)) {
-                                  launchUrl(url,
-                                      mode: LaunchMode.externalApplication);
-                                } else {
-                                  MotionToast.error(
-                                          title: Text("Error"),
-                                          description:
-                                              Text("Result is not URL"),
-                                          position: MotionToastPosition.top)
-                                      .show(context);
-                                }
+                                canLaunchUrl(url)
+                                    .then((value) => launchUrl(url,
+                                        mode: LaunchMode.externalApplication))
+                                    .catchError(() => MotionToast.error(
+                                            title: Text("Error"),
+                                            description:
+                                                Text("Result is not URL"),
+                                            position: MotionToastPosition.top)
+                                        .show(context));
                               },
                               text: 'Open URL',
                               shape: GFButtonShape.pills,
