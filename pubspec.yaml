@@ -38,13 +38,13 @@ dependencies:
   
   # Custom
   http: ^1.1.0
+  webview_flutter: ^3.0.0
   url_launcher: ^6.1.12
   getwidget: ^3.1.1
   motion_toast: ^2.7.8
   qr_code_scanner: ^1.0.1
   custom_qr_generator: ^0.1.2
   image_gallery_saver: ^2.0.3
-  webview_flutter: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -57,8 +57,16 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+  # Custom
+  flutter_launcher_icons: ^0.13.1
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_icons:
+  image_path: "assets/logo.png" 
+  android: true
+  ios: true
 
 # The following section is specific to Flutter packages.
 flutter:
