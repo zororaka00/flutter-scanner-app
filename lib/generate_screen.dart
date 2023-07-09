@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 import 'package:getwidget/getwidget.dart';
 import 'package:motion_toast/motion_toast.dart';
@@ -33,6 +34,15 @@ class _GenerateScreenState extends State<GenerateScreen> {
       _textEditingController.text = '';
       generatedText = '';
     });
+  }
+
+  Future<void> pasteTextFromClipboard() async {
+    final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (data != null && data.text != null) {
+      setState(() {
+        _textEditingController.text = data.text!;
+      });
+    }
   }
 
   @override
@@ -67,17 +77,18 @@ class _GenerateScreenState extends State<GenerateScreen> {
                       thickness: 1,
                     ),
                     SizedBox(height: 20.0),
-                    GFTextFieldRounded(
-                      controller: _textEditingController,
-                      editingbordercolor: GFColors.WARNING,
-                      idlebordercolor: GFColors.PRIMARY,
-                      borderwidth: 2,
-                      cornerradius: 15,
-                      hintText: 'Input Text',
-                      onChanged: (value) {
-                        setState(() {});
-                      },
-                    ),
+                    TextField(
+                        controller: _textEditingController,
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Input Text',
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.paste),
+                            onPressed: pasteTextFromClipboard,
+                          ),
+                        )),
                     SizedBox(height: 5.0),
                     GFButton(
                       onPressed: _textEditingController.text.isEmpty
