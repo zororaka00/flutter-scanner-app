@@ -8,6 +8,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qrscanner/banner_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class QRViewScreen extends StatefulWidget {
@@ -53,6 +54,7 @@ class _QRViewScreenState extends State<QRViewScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        const BannerAdScreen(),
                         const Text(
                           'QR Scan',
                           textAlign: TextAlign.center,
