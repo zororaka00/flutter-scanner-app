@@ -10,22 +10,16 @@ class MyHome extends StatefulWidget {
   const MyHome({Key? key}) : super(key: key);
 
   @override
-  _MyHomeState createState() => _MyHomeState();
+  State<MyHome> createState() => _MyHomeState();
 }
 
 class _MyHomeState extends State<MyHome> {
   int _selectedIndex = 1;
 
   static final List<Widget> _screens = <Widget>[
-    GenerateScreen(),
-    QRViewScreen(),
+    const GenerateScreen(),
+    const QRViewScreen(),
   ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +39,9 @@ class _MyHomeState extends State<MyHome> {
         },
         inicialIndex: _selectedIndex,
         items: [
-          CustomBottomBoxBarItem(Icons.create_outlined, Text('Generate')),
+          CustomBottomBoxBarItem(Icons.create_outlined, const Text('Generate')),
           CustomBottomBoxBarItem(
-              Icons.qr_code_scanner_outlined, Text('Qr Scan')),
+              Icons.qr_code_scanner_outlined, const Text('Qr Scan')),
         ],
       ),
     );

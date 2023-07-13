@@ -18,7 +18,7 @@ class QRViewScreen extends StatefulWidget {
 }
 
 class _QRViewScreenState extends State<QRViewScreen> {
-  TextEditingController _textResultController = TextEditingController();
+  final TextEditingController _textResultController = TextEditingController();
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
@@ -45,83 +45,82 @@ class _QRViewScreenState extends State<QRViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: result != null
-          ? Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(5.0),
-              child: SingleChildScrollView(
-                  child: GFCard(
-                      padding: const EdgeInsets.all(5.0),
-                      content: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Text(
-                              'QR Scan',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Divider(
-                              color: Colors.grey,
-                              thickness: 1,
-                            ),
-                            SizedBox(height: 20.0),
-                            GFTextFieldRounded(
-                              controller: _textResultController,
-                              editingbordercolor: GFColors.PRIMARY,
-                              idlebordercolor: GFColors.PRIMARY,
-                              borderwidth: 2,
-                              cornerradius: 15,
-                              hintText: '',
-                              readOnly: true,
-                            ),
-                            SizedBox(height: 5.0),
-                            GFButton(
-                              onPressed: () {
-                                Clipboard.setData(ClipboardData(
-                                    text: _textResultController.text));
-                                MotionToast.success(
-                                        title: Text("Success"),
-                                        description:
-                                            Text("File saved successfully"),
-                                        position: MotionToastPosition.top)
-                                    .show(context);
-                              },
-                              text: 'Copy Text',
-                              shape: GFButtonShape.pills,
-                              color: Colors.orange,
-                            ),
-                            SizedBox(height: 5.0),
-                            GFButton(
-                              onPressed: () {
-                                final Uri url =
-                                    Uri.parse(_textResultController.text);
-                                canLaunchUrl(url)
-                                    .then((value) => launchUrl(url,
-                                        mode: LaunchMode.externalApplication))
-                                    .catchError(() => MotionToast.error(
-                                            title: Text("Error"),
-                                            description:
-                                                Text("Result is not URL"),
-                                            position: MotionToastPosition.top)
-                                        .show(context));
-                              },
-                              text: 'Open URL',
-                              shape: GFButtonShape.pills,
-                            ),
-                            SizedBox(height: 5.0),
-                            GFButton(
-                              onPressed: resetText,
-                              text: 'Reset',
-                              color: GFColors.DANGER,
-                              shape: GFButtonShape.pills,
-                            ),
-                          ],
+          ? SingleChildScrollView(
+              child: GFCard(
+                  padding: const EdgeInsets.all(5.0),
+                  content: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          'QR Scan',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ))))
+                        const Divider(
+                          color: Colors.grey,
+                          thickness: 1,
+                        ),
+                        const SizedBox(height: 20.0),
+                        GFTextFieldRounded(
+                          controller: _textResultController,
+                          editingbordercolor: GFColors.PRIMARY,
+                          idlebordercolor: GFColors.PRIMARY,
+                          borderwidth: 2,
+                          cornerradius: 15,
+                          hintText: '',
+                          readOnly: true,
+                        ),
+                        const SizedBox(height: 5.0),
+                        GFButton(
+                          onPressed: () {
+                            Clipboard.setData(ClipboardData(
+                                text: _textResultController.text));
+                            MotionToast.success(
+                                    title: const Text("Success"),
+                                    description:
+                                        const Text("File saved successfully"),
+                                    position: MotionToastPosition.top)
+                                .show(context);
+                          },
+                          text: 'Copy Text',
+                          shape: GFButtonShape.pills,
+                          color: Colors.orange,
+                        ),
+                        const SizedBox(height: 5.0),
+                        GFButton(
+                          onPressed: () async {
+                            final Uri url =
+                                Uri.parse(_textResultController.text);
+                            if (await canLaunchUrl(url)) {
+                              launchUrl(url,
+                                  mode: LaunchMode.externalApplication);
+                            } else {
+                              MotionToast.error(
+                                      title: const Text("Error"),
+                                      description:
+                                          const Text("Result is not URL"),
+                                      position: MotionToastPosition.top)
+                                  .show(context);
+                            }
+                          },
+                          text: 'Open URL',
+                          shape: GFButtonShape.pills,
+                        ),
+                        const SizedBox(height: 5.0),
+                        GFButton(
+                          onPressed: resetText,
+                          text: 'Reset',
+                          color: GFColors.DANGER,
+                          shape: GFButtonShape.pills,
+                        ),
+                      ],
+                    ),
+                  )))
           : Column(
               children: [
                 Expanded(flex: 4, child: _buildQrView(context)),
@@ -149,7 +148,7 @@ class _QRViewScreenState extends State<QRViewScreen> {
                               },
                             ),
                           ),
-                          SizedBox(height: 5.0),
+                          const SizedBox(height: 5.0),
                           GFButton(
                             shape: GFButtonShape.pills,
                             fullWidthButton: true,

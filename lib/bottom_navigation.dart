@@ -35,7 +35,7 @@ class CustomBottomBoxBar extends StatefulWidget {
       : super(key: key);
 
   @override
-  _CustomBottomBoxBarState createState() => _CustomBottomBoxBarState();
+  State<CustomBottomBoxBar> createState() => _CustomBottomBoxBarState();
 }
 
 class _CustomBottomBoxBarState extends State<CustomBottomBoxBar> {

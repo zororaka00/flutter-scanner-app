@@ -7,6 +7,7 @@ import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:custom_qr_generator/custom_qr_generator.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:qrscanner/banner_ads.dart';
 
 final qrKey = GlobalKey();
 
@@ -14,11 +15,11 @@ class GenerateScreen extends StatefulWidget {
   const GenerateScreen({Key? key}) : super(key: key);
 
   @override
-  _GenerateScreenState createState() => _GenerateScreenState();
+  State<GenerateScreen> createState() => _GenerateScreenState();
 }
 
 class _GenerateScreenState extends State<GenerateScreen> {
-  TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
   String generatedText = '';
 
   void generateText() {
@@ -52,100 +53,93 @@ class _GenerateScreenState extends State<GenerateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          color: Colors.white,
-          padding: const EdgeInsets.all(5.0),
-          child: SingleChildScrollView(
-            child: GFCard(
-              content: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      'Generate QR Code',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.grey,
-                      thickness: 1,
-                    ),
-                    SizedBox(height: 20.0),
-                    TextField(
-                        controller: _textEditingController,
-                        onChanged: (value) {
-                          setState(() {});
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Input Text',
-                          suffixIcon: IconButton(
-                            icon: Icon(Icons.paste),
-                            onPressed: pasteTextFromClipboard,
-                          ),
-                        )),
-                    SizedBox(height: 5.0),
-                    GFButton(
-                      onPressed: _textEditingController.text.isEmpty
-                          ? null
-                          : generateText,
-                      text: 'Generate',
-                      shape: GFButtonShape.pills,
-                    ),
-                    SizedBox(height: 5.0),
-                    GFButton(
-                      onPressed: _textEditingController.text.isEmpty
-                          ? null
-                          : resetText,
-                      text: 'Reset',
-                      color: GFColors.DANGER,
-                      shape: GFButtonShape.pills,
-                    ),
-                    SizedBox(height: 5.0),
-                    if (generatedText.isNotEmpty)
-                      GFButton(
-                        onPressed: downloadQrCode,
-                        text: 'Download',
-                        color: GFColors.SUCCESS,
-                        shape: GFButtonShape.pills,
-                      ),
-                    Visibility(
-                        visible: generatedText.isNotEmpty,
-                        child: Column(children: [
-                          SizedBox(height: 5.0),
-                          RepaintBoundary(
-                            key: qrKey,
-                            child: CustomPaint(
-                              painter: QrPainter(
-                                  data: generatedText,
-                                  options: const QrOptions(
-                                      shapes: QrShapes(
-                                          darkPixel: QrPixelShapeRoundCorners(
-                                              cornerFraction: .5),
-                                          frame: QrFrameShapeRoundCorners(
-                                              cornerFraction: .25),
-                                          ball: QrBallShapeRoundCorners(
-                                              cornerFraction: .25)),
-                                      colors: QrColors(
-                                          dark: QrColorLinearGradient(
-                                              colors: [
-                                            Color.fromARGB(255, 255, 0, 0),
-                                            Color.fromARGB(255, 0, 0, 255),
-                                          ],
-                                              orientation: GradientOrientation
-                                                  .leftDiagonal)))),
-                              size: const Size(200, 200),
-                            ),
-                          ),
-                        ]))
-                  ],
+      body: SingleChildScrollView(
+        child: GFCard(
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const BannerAdScreen(),
+              const Text(
+                'Generate QR Code',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          )),
+              const Divider(
+                color: Colors.grey,
+                thickness: 1,
+              ),
+              const SizedBox(height: 20.0),
+              TextField(
+                  controller: _textEditingController,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Input Text',
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.paste),
+                      onPressed: pasteTextFromClipboard,
+                    ),
+                  )),
+              const SizedBox(height: 5.0),
+              GFButton(
+                onPressed:
+                    _textEditingController.text.isEmpty ? null : generateText,
+                text: 'Generate',
+                shape: GFButtonShape.pills,
+              ),
+              const SizedBox(height: 5.0),
+              GFButton(
+                onPressed:
+                    _textEditingController.text.isEmpty ? null : resetText,
+                text: 'Reset',
+                color: GFColors.DANGER,
+                shape: GFButtonShape.pills,
+              ),
+              const SizedBox(height: 5.0),
+              if (generatedText.isNotEmpty)
+                GFButton(
+                  onPressed: downloadQrCode,
+                  text: 'Download',
+                  color: GFColors.SUCCESS,
+                  shape: GFButtonShape.pills,
+                ),
+              Visibility(
+                  visible: generatedText.isNotEmpty,
+                  child: Column(children: [
+                    const SizedBox(height: 5.0),
+                    RepaintBoundary(
+                      key: qrKey,
+                      child: CustomPaint(
+                        painter: QrPainter(
+                            data: generatedText,
+                            options: const QrOptions(
+                                shapes: QrShapes(
+                                    darkPixel: QrPixelShapeRoundCorners(
+                                        cornerFraction: .5),
+                                    frame: QrFrameShapeRoundCorners(
+                                        cornerFraction: .25),
+                                    ball: QrBallShapeRoundCorners(
+                                        cornerFraction: .25)),
+                                colors: QrColors(
+                                    dark: QrColorLinearGradient(
+                                        colors: [
+                                      Color.fromARGB(255, 255, 0, 0),
+                                      Color.fromARGB(255, 0, 0, 255),
+                                    ],
+                                        orientation: GradientOrientation
+                                            .leftDiagonal)))),
+                        size: const Size(200, 200),
+                      ),
+                    ),
+                  ]))
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -168,7 +162,7 @@ class _GenerateScreenState extends State<GenerateScreen> {
               ui.Color.fromARGB(255, 0, 0, 255),
             ], orientation: GradientOrientation.leftDiagonal))));
 
-    painter.paint(canvas, ui.Size.square(qrSize));
+    painter.paint(canvas, const ui.Size.square(qrSize));
 
     final ui.Image qrImage =
         await recorder.endRecording().toImage(qrSize.toInt(), qrSize.toInt());
@@ -181,14 +175,14 @@ class _GenerateScreenState extends State<GenerateScreen> {
 
     if (result['isSuccess']) {
       MotionToast.success(
-              title: Text("Success"),
-              description: Text("File saved successfully"),
+              title: const Text("Success"),
+              description: const Text("File saved successfully"),
               position: MotionToastPosition.top)
           .show(context);
     } else {
       MotionToast.error(
-              title: Text("Error"),
-              description: Text("Failed to save file"),
+              title: const Text("Error"),
+              description: const Text("Failed to save file"),
               position: MotionToastPosition.top)
           .show(context);
     }

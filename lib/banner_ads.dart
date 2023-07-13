@@ -1,16 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BannerAdScreen extends StatefulWidget {
   const BannerAdScreen({Key? key}) : super(key: key);
 
   @override
-  _BannerAdScreenState createState() => _BannerAdScreenState();
+  State<BannerAdScreen> createState() => _BannerAdScreenState();
 }
 
 class _BannerAdScreenState extends State<BannerAdScreen> {
-  String? _resultAd;
+  String imageUrl = '';
+  String linkUrl = '';
 
   @override
   void initState() {
@@ -22,23 +27,34 @@ class _BannerAdScreenState extends State<BannerAdScreen> {
     final response =
         await http.get(Uri.parse('https://www.rrndev.xyz/adscanner'));
     if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
       setState(() {
-        String getBody = response.body;
-        _resultAd = '<html><body>$getBody</body></html>';
+        print(responseBody);
+        imageUrl = responseBody['image'];
+        linkUrl = responseBody['link'];
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return _resultAd != null && _resultAd!.isNotEmpty
-        ? Container(
-            height: 50,
-            child: WebView(
-              initialUrl: Uri.dataFromString(_resultAd!, mimeType: 'text/html')
-                  .toString(),
-              javascriptMode: JavascriptMode.unrestricted,
-            ))
+    return imageUrl.isNotEmpty && linkUrl.isNotEmpty
+        ? InkWell(
+            onTap: () => _launchURL(Uri.parse(linkUrl)),
+            child: Flexible(child: Image.network(imageUrl)),
+          )
         : Container();
+  }
+
+  void _launchURL(Uri url) async {
+    if (await canLaunchUrl(url)) {
+      launchUrl(url);
+    } else {
+      MotionToast.error(
+              title: const Text("Error"),
+              description: const Text('Could not launch URL'),
+              position: MotionToastPosition.top)
+          .show(context);
+    }
   }
 }
